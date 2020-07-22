@@ -1,0 +1,43 @@
+﻿<div id="example">
+    <h3> Manage Invoices</h3>
+    <div id="grid"></div>
+    <script>
+        $("#grid").kendoGrid({
+            height: 400,
+            columns: [
+                { field: "InvoiceNumber" },
+                { field: "InvoiceType" },
+                { field: "InvoiceDate" },
+                { field: "InvoiceAmount" },
+                { field: "Category" }
+            ],
+            dataSource: {
+                type: "aspnetmvc-ajax",
+                transport: {
+                    read: {
+                        url: "invoice/Invoices_Read"
+                    }
+                },
+                schema: {
+                    data: "Data",
+                    model: {
+                        id: "InvoiceID",
+                        fields: {
+                            InvoiceID: { type: "number" },
+                            InvoiceNumber: { type: "string" },
+                            InvoiceType: { type: "string" },
+                            InvoiceDate: { type: "date" },
+                            InvoiceAmount: { type: "number" },
+                            Category: { type: "string" }
+                        }
+                    }
+                },
+                serverPaging: true,
+                serverSorting: true,
+                serverSorting: true,
+            },
+            scrollable: true
+        })
+
+    </script>
+</div>

@@ -1,0 +1,115 @@
+﻿
+    <div id="example">
+        <h3> Manage Companies</h3>
+        <div id="grid"></div>
+        <script>
+            $("#grid").kendoGrid({
+                height: 500,
+                toolbar: ["create"],
+                columns: [
+                    { field: "Name", title: "Company Name", width: "200px" },
+                    { field: "AddressLine1", title: "Address Line One", width: "200px" },
+                    { field: "AddressLine2", title: "Address Line Two", width: "200px" },
+                    { field: "City", title: "City", width: "120px" },
+                    { field: "State", title: "State", width: "150px", editor: stateDropDownEditor, template: "#=State#" },
+                    { field: "ZipCode", title: "Zip Code", width: "100px" },
+                    { field: "Country", title: "Country", width: "180px", editor: countryDropDownEditor, template: "#=Country#" },
+                    { field: "Contact", title: "Phone", width: "150px" },
+                    //{ field: "TradingZone", title: "Zone", width: "120px" },
+                    //{ field: "LogoPath", title: "Company Logo", width: "120px" },
+
+                    { command: ["edit", "destroy"], title: "&nbsp;", width: "220px" }],
+                filterable: true,
+                editable: "inline",
+                dataSource: {
+                    pageSize: 20,
+                    batch: true,
+                    transport: {
+                        read: {
+                            url: "Company/Company_Read"
+                        },
+                        update: {
+                            url: "Company/Update",
+                            dataType: "jsonp"
+                        },
+                        destroy: {
+                            url: "Company/Destroy",
+                            dataType: "jsonp"
+                        },
+                        create: {
+                            url: "Company/Create",
+                            dataType: "jsonp"
+                        },
+                        parameterMap: function (options, operation) {
+                            if (operation !== "read" && options.models) {
+                                return { models: kendo.stringify(options.models) };
+                            }
+                        }
+                    },
+                    schema: {
+                        data: "Data",
+                        model: {
+                            id: "CompanyID",
+                            fields: {
+                                CompanyID: { type: "number", editable: false },
+                                Name: { type: "string", validation: { required: true } },
+                                AddressLine1: { type: "string", editable: true },
+                                AddressLine2: { type: "string", editable: true },
+                                City: { type: "string", editable: true },
+                                State: { type: "string", editable: true },
+                                ZipCode: { type: "string", editable: true },
+                                Country: { type: "string", editable: true },
+                                Contact: { type: "string", editable: true },
+                                TradingZone: { type: "string", editable: false },
+                                LogoPath: { type: "string", editable: false }
+
+                            }
+                        }
+                    },
+                    serverPaging: true,
+                    serverSorting: true,
+                    serverSorting: true,
+                },
+
+                scrollable: true,
+                groupable: true
+            });
+
+
+            function stateDropDownEditor(container, options) {
+                $('<input required name="' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        autoBind: false,
+                        dataTextField: "Name",
+                        dataValueField: "Name",
+                        dataSource: {
+                            transport: {
+                                read: {
+                                    url: "Company/States_Read",
+                                    dataType: "jsonp"
+                                }
+                            }
+                        }
+                    });
+            };
+
+            function countryDropDownEditor(container, options) {
+                $('<input required name="' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        autoBind: true,
+                        dataTextField: "Name",
+                        dataValueField: "Name",
+                        dataSource: {
+                            transport: {
+                                read: {
+                                    url: "Company/Countries_Read",
+                                    dataType: "jsonp"
+                                }
+                            }
+                        }
+                    });
+            };
+        </script>
+    </div>
